@@ -44,15 +44,6 @@
   .bg.night .day{opacity:0}
   .bg.night .night{opacity:1}
   /* Hochformat (Handy): Foto komplett sichtbar, Ränder weich unscharf aufgefüllt */
-  @media (max-aspect-ratio: 4/5){
-    .layer::before{
-      content:"";
-      position:absolute;inset:-70px;
-      background:inherit;background-size:cover;background-position:center;
-      filter:blur(26px) brightness(.55) saturate(.9);
-    }
-    .layer .full{background-size:contain}
-  }
   .bg::after{
     content:"";
     position:absolute;inset:0;
@@ -310,7 +301,8 @@
     display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
     font-family:'Helvetica Neue',Arial,sans-serif;font-size:.75rem;letter-spacing:.06em;
   }
-  .hinweis{
+  .hinweis{z-index:45;position:relative;
+    
     background:var(--creme);color:var(--ink2);
     font-family:'Helvetica Neue',Arial,sans-serif;font-size:.72rem;
     padding:.45rem 5vw;text-align:center;letter-spacing:.03em;
@@ -319,8 +311,6 @@
 </style>
 </head>
 <body>
-
-<div class="hinweis"><span style="float:right">Stand: 27.10.2026, 20:55 Uhr</span>Design-Entwurf · feststehendes Hintergrundfoto, wechselt beim Scrollen von Tag auf Nacht · Texte sind Platzhalter</div>
 
 <header>
   <div class="logo">Wirtshaus Oberbachern<em>Fest &amp; Wirtshaus im Gewölbe</em></div>
@@ -332,6 +322,8 @@
     <a href="#kontakt">Anfrage</a>
   </nav>
 </header>
+
+<div class="hinweis" id="hinweis"><span style="float:right">Stand: 27.10.2026, 21:02 Uhr</span>Design-Entwurf · Texte sind Platzhalter</div>
 
 <!-- Fester Hintergrund: erst Tag, später Nacht -->
 <div class="bg" id="bg" style="--day:url('IMG_3603.jpg');--night:url('IMG_3615.jpg')">
@@ -502,6 +494,12 @@
       }
     }, {passive:false});
   }
+  var hinweisEl = document.getElementById('hinweis');
+  var headerEl = document.querySelector('header');
+  function placeHinweis(){ hinweisEl.style.marginTop = (headerEl.offsetHeight - 2) + 'px'; }
+  window.addEventListener('resize', placeHinweis);
+  placeHinweis();
+
   var hint = document.querySelector('.hintdown');
   var kontakt = document.getElementById('kontakt');
   function checkHint(){
