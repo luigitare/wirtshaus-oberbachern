@@ -186,18 +186,22 @@
     margin-top:1.1rem;color:var(--gold);
   }
   .galerie-btn{
-    position:absolute;top:42%;transform:translateY(-50%);z-index:5;
-    width:46px;height:46px;border-radius:50%;
-    background:rgba(251,248,240,.92);border:1px solid #d8ccae;
-    color:var(--gruen);cursor:pointer;
+    position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+    width:48px;height:48px;
+    background:transparent;border:none;padding:0;
+    color:var(--creme);cursor:pointer;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 14px rgba(20,14,6,.25);
+    filter:drop-shadow(0 1px 4px rgba(0,0,0,.55));
+    opacity:.9;
   }
-  .galerie-btn:hover{background:var(--creme)}
-  .galerie-btn.btnL{left:10px}
-  .galerie-btn.btnR{right:10px}
+  .galerie-btn:hover{opacity:1}
+  .galerie-btn svg{transition:transform .2s ease}
+  .galerie-btn.btnL:hover svg{transform:translateX(-3px)}
+  .galerie-btn.btnR:hover svg{transform:translateX(3px)}
+  .galerie-btn.btnL{left:6px}
+  .galerie-btn.btnR{right:6px}
   @media(max-width:760px){
-    .galerie-btn{width:38px;height:38px;opacity:.9}
+    .galerie-btn{width:40px;height:40px}
   }
   @media(min-width:761px){
     .swipe-hint{display:none}
@@ -361,8 +365,8 @@
           <img src="IMG_3614.jpg" alt="Langer Tisch im Gewölbe bei warmem Licht">
           <img src="eingang-nacht.webp" alt="Eingang bei Nacht">
         </div>
-        <button class="galerie-btn btnL" aria-label="Vorheriges Bild"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
-        <button class="galerie-btn btnR" aria-label="Nächstes Bild"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+        <button class="galerie-btn btnL" aria-label="Vorheriges Bild"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="galerie-btn btnR" aria-label="Nächstes Bild"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
         <div class="swipe-hint">
           <svg class="arrL" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
           <span class="lbl">Wischen</span>
