@@ -199,14 +199,16 @@
     width:46px;height:46px;border-radius:50%;
     background:rgba(251,248,240,.92);border:1px solid #d8ccae;
     color:var(--gruen);cursor:pointer;
-    display:none;align-items:center;justify-content:center;
+    display:flex;align-items:center;justify-content:center;
     box-shadow:0 4px 14px rgba(20,14,6,.25);
   }
   .galerie-btn:hover{background:var(--creme)}
   .galerie-btn.btnL{left:10px}
   .galerie-btn.btnR{right:10px}
+  @media(max-width:760px){
+    .galerie-btn{width:38px;height:38px;opacity:.9}
+  }
   @media(min-width:761px){
-    .galerie-btn{display:flex}
     .swipe-hint{display:none}
   }
   .swipe-hint svg{display:block}
@@ -275,6 +277,32 @@
   }
   button:hover{background:var(--gruen2)}
 
+  /* Cookie-Hinweis */
+  .banner{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:rgba(251,248,240,.97);
+    border-top:1px solid #e3d9c2;
+    padding:1rem 5vw;
+    display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+    font-size:.88rem;color:var(--ink2);
+    box-shadow:0 -8px 30px rgba(20,14,6,.15);
+  }
+  .banner .btns{display:flex;gap:.6rem;margin-left:auto}
+  .btn-ok{
+    background:var(--gruen);color:var(--creme);border:none;cursor:pointer;
+    padding:.6rem 1.2rem;border-radius:2px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .btn-ok:hover{background:var(--gruen2)}
+  .btn-no{
+    background:transparent;color:var(--ink2);border:1px solid #c9b98a;cursor:pointer;
+    padding:.6rem 1.2rem;border-radius:2px;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .banner a{color:var(--gruen)}
+  .mapholder{width:100%;height:360px;display:flex;align-items:center;justify-content:center;background:var(--creme2);color:var(--ink2)}
   footer{
     background:var(--gruen2);
     color:rgba(247,242,230,.65);
@@ -292,7 +320,7 @@
 </head>
 <body>
 
-<div class="hinweis">Design-Entwurf · feststehendes Hintergrundfoto, wechselt beim Scrollen von Tag auf Nacht · Texte sind Platzhalter</div>
+<div class="hinweis"><span style="float:right">Stand: 27.10.2026, 20:55 Uhr</span>Design-Entwurf · feststehendes Hintergrundfoto, wechselt beim Scrollen von Tag auf Nacht · Texte sind Platzhalter</div>
 
 <header>
   <div class="logo">Wirtshaus Oberbachern<em>Fest &amp; Wirtshaus im Gewölbe</em></div>
@@ -382,7 +410,7 @@
         Dorfstraße 53 · 85232 Bergkirchen
       </p>
       <div style="margin-top:1.8rem;position:relative;border-radius:4px;overflow:hidden;box-shadow:0 10px 30px rgba(20,14,6,.2)">
-        <iframe title="Karte: Wirtshaus Oberbachern, Bergkirchen" src="https://maps.google.com/maps?q=Gasthof%20Wirtshaus%20Oberbachern%2C%20Dorfstra%C3%9Fe%2053%2C%2085232%20Bergkirchen&z=15&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:360px;border:0;display:block"></iframe>
+        <div id="mapbox" class="mapholder">Karte wird geladen …</div>
       </div>
       <p class="sans" style="font-size:.72rem;color:var(--ink2);margin-top:.7rem">Hinweis: In der Canvas-Vorschau kann die Karte aus Sicherheitsgründen nicht laden – auf GitHub Pages / im Browser funktioniert sie.</p>
     </section>
@@ -415,16 +443,64 @@
   </div>
 
   <footer>
-    <span>© Wirtshaus Oberbachern · Impressum · Datenschutz</span>
+    <span>© Wirtshaus Oberbachern</span>
+  <span><a href="impressum.html" style="color:inherit">Impressum</a> · <a href="datenschutz.html" style="color:inherit">Datenschutz</a></span>
     <span>Öffnungszeiten-Platzhalter: Mi–So ab 17 Uhr</span>
   </footer>
 </main>
 
+<div class="banner" id="banner" style="display:none">
+  <span>Wir betten eine Google-Maps-Karte ein – dabei setzt Google Cookies. Details in der <a href="datenschutz.html">Datenschutzerklärung</a>.</span>
+  <span class="btns">
+    <button class="btn-ok" id="okAll">Alles erlauben</button>
+    <button class="btn-no" id="noAll">Ablehnen</button>
+  </span>
+</div>
+
 <script>
+  var MAPSRC = "https://maps.google.com/maps?q=Gasthof%20Wirtshaus%20Oberbachern%2C%20Dorfstra%C3%9Fe%2053%2C%2085232%20Bergkirchen&z=15&output=embed";
+  function loadMap(){
+    var box = document.getElementById('mapbox');
+    if(!box) return;
+    box.innerHTML = '<iframe title="Karte: Wirtshaus Oberbachern, Bergkirchen" src="' + MAPSRC + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:360px;border:0;display:block"></iframe>';
+  }
+  function declinedMap(){
+    var box = document.getElementById('mapbox');
+    if(!box) return;
+    box.innerHTML = '<div style="text-align:center;padding:1rem"><p style="margin:0 0 .8rem">Karte wegen fehlender Zustimmung nicht geladen.</p><button class="btn-ok" id="mapLoad">Karte trotzdem laden</button></div>';
+    document.getElementById('mapLoad').addEventListener('click', function(){ setConsent('all'); });
+  }
+  function setConsent(v){
+    try{ localStorage.setItem('obs-consent', v); }catch(e){}
+    document.getElementById('banner').style.display = 'none';
+    if(v === 'all'){ loadMap(); } else { declinedMap(); }
+  }
+  (function(){
+    var c = null;
+    try{ c = localStorage.getItem('obs-consent'); }catch(e){}
+    if(c === 'all'){ loadMap(); }
+    else if(c === 'none'){ declinedMap(); }
+    else {
+      document.getElementById('banner').style.display = 'flex';
+      document.getElementById('okAll').addEventListener('click', function(){ setConsent('all'); });
+      document.getElementById('noAll').addEventListener('click', function(){ setConsent('none'); });
+      declinedMap();
+    }
+  })();
+
   var track = document.querySelector('.galerie-track');
   if (track) {
     document.querySelector('.btnL').addEventListener('click', function(){ track.scrollBy({left: -track.clientWidth * 0.72, behavior: 'smooth'}); });
     document.querySelector('.btnR').addEventListener('click', function(){ track.scrollBy({left: track.clientWidth * 0.72, behavior: 'smooth'}); });
+  }
+  var gtrack = document.querySelector('.galerie-track');
+  if (gtrack) {
+    gtrack.addEventListener('wheel', function(e){
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        e.preventDefault();
+        gtrack.scrollLeft += e.deltaY;
+      }
+    }, {passive:false});
   }
   var hint = document.querySelector('.hintdown');
   var kontakt = document.getElementById('kontakt');
