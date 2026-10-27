@@ -147,10 +147,10 @@
     border-radius:6px;
     box-shadow:0 18px 50px rgba(20,14,6,.35);
     padding:clamp(2rem,5vw,4.5rem);
-    margin-bottom:55vh; /* große Lücken: Hintergrundfoto wird zwischendurch frei sichtbar */
+    margin-bottom:78vh; /* große Lücken: Hintergrundfoto wird zwischendurch frei sichtbar */
     position:relative;
   }
-  @media(max-width:760px){.panel{margin-bottom:48vh}}
+  @media(max-width:760px){.panel{margin-bottom:115vh}}
   /* Inhalte tauchen erst sanft auf, wenn man weiter scrolled */
   .reveal{
     opacity:0;
@@ -170,22 +170,40 @@
   }
   .intro{max-width:38em;color:var(--ink2)}
 
-  /* Fotogrid im Atmosphäre-Panel */
-  .grid{
-    display:grid;grid-template-columns:repeat(12,1fr);
-    gap:12px;margin-top:2.5rem;
+  /* Foto-Galerie: horizontal wischen */
+  .galerie{position:relative;margin-top:2.5rem}
+  .galerie-track{
+    display:flex;gap:12px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:4px;
   }
-  img.ph{width:100%;height:100%;object-fit:cover;border-radius:2px}
-  .ph1{grid-column:span 7;min-height:360px}
-  .ph2{grid-column:span 5;min-height:172px}
-  .ph3{grid-column:span 5;min-height:172px}
-  .ph4{grid-column:span 4;min-height:220px}
-  .ph5{grid-column:span 4;min-height:220px}
-  .ph6{grid-column:span 4;min-height:220px}
+  .galerie-track::-webkit-scrollbar{display:none}
+  .galerie img{
+    flex:0 0 76%;width:76%;height:56vh;
+    scroll-snap-align:center;
+    object-fit:cover;border-radius:4px;
+    box-shadow:0 10px 30px rgba(20,14,6,.28);
+  }
   @media(max-width:760px){
-    .grid>*{grid-column:span 12 !important}
-    .ph1{min-height:280px}
+    .galerie img{flex-basis:84%;width:84%;height:52vh}
   }
+  .swipe-hint{
+    display:flex;align-items:center;justify-content:center;gap:.9rem;
+    margin-top:1.1rem;color:var(--gold);
+  }
+  .swipe-hint svg{display:block}
+  .swipe-hint .arrL{animation:nudgeL 1.8s ease-in-out infinite}
+  .swipe-hint .arrR{animation:nudgeR 1.8s ease-in-out infinite}
+  .swipe-hint .lbl{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink2);
+  }
+  @keyframes nudgeL{0%,100%{transform:translateX(0)}50%{transform:translateX(-8px)}}
+  @keyframes nudgeR{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
 
   /* Anlässe */
   .panel.anlaesse{background:var(--gruen)}
@@ -272,7 +290,7 @@
 </header>
 
 <!-- Fester Hintergrund: erst Tag, später Nacht -->
-<div class="bg" id="bg" style="--day:url('IMG_3610.jpg');--night:url('IMG_3615.jpg')">
+<div class="bg" id="bg" style="--day:url('IMG_3603.jpg');--night:url('IMG_3615.jpg')">
   <div class="layer day" style="background-image:var(--day)"><div class="full"></div></div>
   <div class="layer night" style="background-image:var(--night)"><div class="full"></div></div>
 </div>
@@ -288,7 +306,7 @@
       <a class="cta" href="#kontakt">Verfügbarkeit anfragen</a>
       <a class="cta ghost" href="#atmos">Eindrücke ansehen</a>
     </div>
-    <div class="hintdown sans">SCROLLEN</div>
+    <div class="hintdown"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l8 8 8-8"/></svg></div>
   </div>
 
   <div class="wrap">
@@ -297,13 +315,21 @@
       <p class="kicker">Atmosphäre</p>
       <h2>Licht vom Gewölbe,<br>Holz aufn Tisch.</h2>
       <p class="intro">Platzhalter: Ein kurzer Absatz über die Räume – urig und ehrlich, hell am Tag, warm am Abend, immer mit Platz für lange Tafeln.</p>
-      <div class="grid">
-        <img class="ph ph1" src="IMG_3603.jpg" alt="Heller runder Saal unter Kuppelgewölbe">
-        <img class="ph ph2" src="IMG_3604.jpg" alt="Buffet im hellen Gewölbesaal">
-        <img class="ph ph3" src="IMG_3613.jpg" alt="Gastraum mit Gewölbe im Kerzenlicht">
-        <img class="ph ph4" src="IMG_3617.jpg" alt="Lange Tafel mit Blumenschmuck">
-        <img class="ph ph5" src="IMG_3618.jpg" alt="Gedeckte Tafel mit Weingläsern">
-        <img class="ph ph6" src="IMG_3614.jpg" alt="Langer Tisch im Gewölbe bei warmem Licht">
+            <div class="galerie">
+        <div class="galerie-track">
+          <img src="IMG_3610.jpg" alt="Heller Saal mit Kronleuchter">
+          <img src="IMG_3604.jpg" alt="Buffet im hellen Gewölbesaal">
+          <img src="IMG_3613.jpg" alt="Gastraum mit Gewölbe im Kerzenlicht">
+          <img src="IMG_3617.jpg" alt="Lange Tafel mit Blumenschmuck">
+          <img src="IMG_3618.jpg" alt="Gedeckte Tafel mit Weingläsern">
+          <img src="IMG_3614.jpg" alt="Langer Tisch im Gewölbe bei warmem Licht">
+          <img src="eingang-nacht.webp" alt="Eingang bei Nacht">
+        </div>
+        <div class="swipe-hint">
+          <svg class="arrL" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+          <span class="lbl">Wischen</span>
+          <svg class="arrR" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
       </div>
     </section>
 
