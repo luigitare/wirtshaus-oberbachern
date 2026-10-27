@@ -327,7 +327,7 @@
   </nav>
 </header>
 
-<div class="hinweis" id="hinweis"><span style="float:right">Stand: 27.10.2026, 21:02 Uhr</span>Design-Entwurf · Texte sind Platzhalter</div>
+<div class="hinweis" id="hinweis"><span style="float:right" id="stand">Stand: …</span>Design-Entwurf · Texte sind Platzhalter</div>
 
 <!-- Fester Hintergrund: erst Tag, später Nacht -->
 <div class="bg" id="bg" style="--day:url('IMG_3603.jpg');--night:url('IMG_3615.jpg')">
@@ -504,6 +504,14 @@
   window.addEventListener('resize', placeHinweis);
   placeHinweis();
 
+  var standEl = document.getElementById('stand');
+  if (standEl) {
+    var d = new Date(document.lastModified);
+    if (!isNaN(d.getTime())) {
+      var p2 = function(x){ return (x<10?'0':'') + x; };
+      standEl.textContent = 'Stand: ' + d.getDate() + '.' + p2(d.getMonth()+1) + '.' + d.getFullYear() + ', ' + p2(d.getHours()) + ':' + p2(d.getMinutes()) + ' Uhr';
+    }
+  }
   var hint = document.querySelector('.hintdown');
   var kontakt = document.getElementById('kontakt');
   function checkHint(){
